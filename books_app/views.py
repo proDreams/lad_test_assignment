@@ -10,6 +10,7 @@ class AllBooksPage(ListView):
     template_name = "books_app/all_books.html"
     extra_context = {'title': 'Главная страница'}
     context_object_name = 'books'
+    paginate_by = 5
 
 
 class BookPage(DetailView):

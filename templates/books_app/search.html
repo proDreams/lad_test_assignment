@@ -17,12 +17,15 @@
                         {% for book in results %}
                             <div class="row">
                                 <div class="col-lg-2 col-sm-12 d-flex align-items-center">
-                                    <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid" width="130" height="190">
+                                    <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid"
+                                         width="130" height="190">
                                 </div>
                                 <div class="col-lg-8 col-sm-12">
                                     <h2 class="head2"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
                                     <div class="mb-3">
-                                        <p class="lead"><b>Автор:</b> {{ book.author }}</p>
+                                        <p class="lead"><b>Автор:</b> {{ book.author }}<br><b>
+                                            Год издания:</b> {{ book.publication_year }}<br><br>
+                                            <b>Краткое описание:</b></p>
                                     </div>
                                     <p>{{ book.short_description }}</p>
                                 </div>

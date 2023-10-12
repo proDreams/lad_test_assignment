@@ -9,9 +9,10 @@
             </div>
             <div class="col">
                 <h2>{{ book.title }}</h2>
-                <p><b>Автор:</b> {{ book.author }}</p>
-                <p><b>Год издания:</b> {{ book.publication_year }}</p>
-                <p><b>Краткое описание:</b> {{ book.short_description }}</p>
+                <p class="lead"><b>Автор:</b> {{ book.author }}<br><b>
+                    Год издания:</b> {{ book.publication_year }}<br><br>
+                    <b>Краткое описание:</b></p>
+                <p>{{ book.short_description }}</p>
             </div>
         </div>
     </div>

@@ -2,29 +2,31 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="container mt-3">
-        <h1>Все книги</h1>
-        <div class="table-responsive-sm">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Название книги</th>
-                    <th>Автор</th>
-                    <th>Год издания</th>
-                    <th>Краткое описание</th>
-                    <th>Обложка</th>
-                </tr>
-                {% for book in books %}
-                    <tr>
-                        <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ book.publication_year }}</td>
-                        <td>{{ book.short_description }}</td>
-                        <td>
-                            <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid">
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+    <div class="container mt-5">
+        <div class="row">
+
+            {% for book in books %}
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12 text-center">
+                        <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid" width="200"
+                             height="200">
+                    </div>
+                    <div class="col-lg-8 col-sm-12">
+                        <h2 class="head2"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
+                        <div class="mb-3">
+                            <p class="lead"><b>Автор:</b> {{ book.author }}<br><b>
+                                Год издания:</b> {{ book.publication_year }}<br><br>
+                                <b>Краткое описание:</b></p>
+                        </div>
+                        <p>{{ book.short_description }}</p>
+                    </div>
+                </div>
+                <hr class="m-3">
+            {% endfor %}
+        </div>
+
+        <div class="col-12">
+            {% include "modules/pagination.html" %}
         </div>
     </div>
 {% endblock %}
