@@ -36,3 +36,20 @@ class AddCommentForm(forms.ModelForm):
     class Meta:
         model = models.CommentModel
         fields = ['comment']
+
+
+class EditCommentForm(forms.ModelForm):
+    comment = forms.CharField(
+        label='Комментарий',
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите ваш комментарий.',
+                'rows': 5,
+            }
+        )
+    )
+
+    class Meta:
+        model = models.CommentModel
+        fields = ['comment']

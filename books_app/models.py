@@ -34,6 +34,7 @@ class BookModel(models.Model):
     class Meta:
         verbose_name = 'Книга'
         verbose_name_plural = 'Книги'
+        ordering = ['title']
 
     def get_absolute_url(self):
         return reverse('book_page', kwargs={'pk': self.pk})

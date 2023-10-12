@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, DeleteView
+from django import forms as basic_forms
 
 from . import models, forms
 
@@ -10,7 +12,7 @@ class AllBooksPage(ListView):
     template_name = "books_app/all_books.html"
     extra_context = {'title': 'Главная страница'}
     context_object_name = 'books'
-    paginate_by = 5
+    paginate_by = 6
 
 
 class BookPage(DetailView):
@@ -36,6 +38,27 @@ class BookPage(DetailView):
             context = self.get_context_data(**kwargs)
             context['form'] = form
             return render(request, self.template_name, context)
+
+
+class CommentUpdateView(UpdateView):
+    model = models.CommentModel
+    template_name = 'books_app/comment_edit.html'
+    form_class = forms.EditCommentForm
+    extra_context = {'title': f'Обновить комментарий?'}
+
+    def get_success_url(self):
+        return reverse_lazy('book_page',
+                            kwargs={'pk': self.object.book.pk})
+
+
+class CommentDeleteView(DeleteView):
+    model = models.CommentModel
+    template_name = 'books_app/confirm_delete.html'
+    extra_context = {'title': f'Удалить комментарий?'}
+
+    def get_success_url(self):
+        return reverse_lazy('book_page',
+                            kwargs={'pk': self.object.book.pk})
 
 
 class SearchPageView(TemplateView):

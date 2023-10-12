@@ -2,28 +2,34 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="container mt-5">
-        <div class="row">
-
-            {% for book in books %}
+<div class="container mt-3">
+    <div class="row">
+    <h2>Все книги</h2>
+        {% for book in books %}
+            {% if forloop.counter0|divisibleby:2 %}
+                </div><div class="row">
+            {% endif %}
+            <div class="col-lg-6 col-sm-12">
+                <hr>
                 <div class="row">
                     <div class="col-lg-3 col-sm-12 text-center">
-                        <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid" width="200"
-                             height="200">
+                        <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid" width="150" height="150">
                     </div>
-                    <div class="col-lg-8 col-sm-12">
+                    <div class="col-lg-9 col-sm-12">
                         <h2 class="head2"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
                         <div class="mb-3">
-                            <p class="lead"><b>Автор:</b> {{ book.author }}<br><b>
-                                Год издания:</b> {{ book.publication_year }}<br><br>
-                                <b>Краткое описание:</b></p>
+                            <p class="lead"><b>Автор:</b> {{ book.author }}<br>
+                                <b>Год издания:</b> {{ book.publication_year }}<br>
+                            <b>Комментарии:</b> {{ book.commentmodel_set.count }}</p>
                         </div>
+                        <b>Краткое описание:</b>
                         <p>{{ book.short_description }}</p>
                     </div>
                 </div>
-                <hr class="m-3">
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
         <div class="col-12">
             {% include "modules/pagination.html" %}

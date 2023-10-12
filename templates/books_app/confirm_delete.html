@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="form-section container mt-3">
+        <h2>Удаление комментария</h2>
+        <p>Вы действительно хотите удалить этот комментарий?</p>
+        <pre>{{ object.comment }}</pre>
+        <form method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit" style="margin-right: 20px;">Да, удалить</button>
+            <a href="{% url 'book_page' object.book.pk  %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

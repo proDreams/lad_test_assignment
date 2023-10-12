@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="form-section container mt-3">
+        <h2>Редактирование комментария</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <p>{{ form.comment.label }}</p>
+            <p>{{ form.comment }}</p>
+            <button class="btn btn-primary" type="submit" style="margin-right: 20px;">Обновить</button>
+            <a href="{% url 'book_page' object.book.pk  %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+{% endblock %}
