@@ -12,7 +12,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(models.BookModel)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'cover_preview', 'author', 'publication_date')
+    list_display = ('title', 'cover_preview', 'author', 'publication_year')
     search_fields = ('title', 'author')
 
     def cover_preview(self, obj):

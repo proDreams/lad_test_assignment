@@ -22,7 +22,7 @@ class BookModel(models.Model):
     author = models.ForeignKey('AuthorModel',
                                on_delete=models.CASCADE,
                                verbose_name='Автор книги')
-    publication_date = models.DateField(verbose_name='Дата публикации')
+    publication_year = models.IntegerField(verbose_name='Дата публикации')
     short_description = models.CharField(max_length=500,
                                          verbose_name='Краткое описание')
     book_cover = models.ImageField(upload_to='books/',

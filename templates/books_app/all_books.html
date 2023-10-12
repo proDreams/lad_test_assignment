@@ -3,6 +3,28 @@
 
 {% block content %}
     <div class="container mt-3">
-    <h1>Все книги</h1>
+        <h1>Все книги</h1>
+        <div class="table-responsive-sm">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Название книги</th>
+                    <th>Автор</th>
+                    <th>Год издания</th>
+                    <th>Краткое описание</th>
+                    <th>Обложка</th>
+                </tr>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.publication_year }}</td>
+                        <td>{{ book.short_description }}</td>
+                        <td>
+                            <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid">
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 {% endblock %}
