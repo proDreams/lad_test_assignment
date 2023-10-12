@@ -18,6 +18,25 @@ class BookPage(DetailView):
     template_name = "books_app/book_page.html"
     context_object_name = 'book'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = models.CommentModel.objects.filter(book=self.object)
+        context['form'] = forms.AddCommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = forms.AddCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.book = self.get_object()
+            comment.user = request.user
+            comment.save()
+            return self.get(request, *args, **kwargs)
+        else:
+            context = self.get_context_data(**kwargs)
+            context['form'] = form
+            return render(request, self.template_name, context)
+
 
 class SearchPageView(TemplateView):
     template_name = 'books_app/search.html'

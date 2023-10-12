@@ -6,7 +6,7 @@ from . import models
 
 @admin.register(models.AuthorModel)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'dob',)
+    list_display = ('name', 'dob')
     search_fields = ('name',)
 
 
@@ -20,3 +20,9 @@ class BookAdmin(admin.ModelAdmin):
         return format_html(f'<img src="{obj.book_cover.url}" width="100"/>')
 
     cover_preview.short_description = 'Обложка'
+
+
+@admin.register(models.CommentModel)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'book', 'created_at', 'comment')
+    list_filter = ('user',)

@@ -15,5 +15,36 @@
                 <p>{{ book.short_description }}</p>
             </div>
         </div>
+
+        <div class="row">
+        <h2 style="margin: 50px 0 30px 0">Добавить комментарий:</h2>
+            {% if user.is_authenticated %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.comment }}
+                    <button class="btn btn-outline-warning mt-2" type="submit">Отправить</button>
+                </form>
+                {% else %}
+                <p><a href="{% url 'login' %}">Войдите</a> чтобы добавить комментарий.</p>
+            {% endif %}
+        </div>
+        <div class="row">
+        <h2 style="margin: 50px 0 30px 0">Комментарии пользователей:</h2>
+            {% if comments %}
+                {% for comment in comments %}
+                    <p>Автор: <strong>{{ comment.user }}</strong> | {{ comment.created_at }}</p>
+                    <p>{{ comment.comment }}</p>
+
+                    {#                {% if comment.user == user %}#}
+                    {#                    <br><a href="{% url 'comment_edit' comment.pk %}">Редактировать</a> |#}
+                    {#                    <a href="{% url 'comment_delete' comment.pk %}">Удалить</a>#}
+                    {#                {% endif %}#}
+                    <hr style="margin: 20px 0 20px 0">
+                {% endfor %}
+            {% else %}
+                <p>Нет комментариев</p>
+            {% endif %}
+
+        </div>
     </div>
 {% endblock %}

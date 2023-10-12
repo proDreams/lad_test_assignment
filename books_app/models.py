@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -39,3 +40,17 @@ class BookModel(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CommentModel(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             verbose_name='Пользователь')
+    book = models.ForeignKey('BookModel',
+                             on_delete=models.CASCADE,
+                             verbose_name='Книга')
+    comment = models.TextField(verbose_name='Комментарий')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Комментарий от {self.user} к книге {self.book}'
