@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="form-section container mt-3 justify-content-center d-flex">
+        <div class="col-lg-4 col-sm-12">
+            <h2>Авторизация на сайте</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <ul class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </ul>
+                {% endif %}
+                {% for field in form %}
+                    <p class="form-label">{{ field.label }}</p>
+                    <p>{{ field }}</p>
+                {% endfor %}
+                <button type="submit" class="btn btn-outline-success">Войти</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
