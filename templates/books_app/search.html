@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ query }}{% endblock %}
+
+{% block content %}
+    <section class="info">
+        <div class="container">
+            <h1>Результаты по запросу: {{ query }}</h1>
+            <hr>
+        </div>
+    </section>
+
+    <section class="posts">
+        {% if results %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 col-sm-12 cat-block">
+                        {% for book in results %}
+                            <div class="row">
+                                <div class="col-lg-2 col-sm-12 d-flex align-items-center">
+                                    <img src="{{ book.book_cover.url }}" alt="{{ book.title }}" class="img-fluid" width="130" height="190">
+                                </div>
+                                <div class="col-lg-8 col-sm-12">
+                                    <h2 class="head2"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
+                                    <div class="mb-3">
+                                        <p class="lead"><b>Автор:</b> {{ book.author }}</p>
+                                    </div>
+                                    <p>{{ book.short_description }}</p>
+                                </div>
+                            </div>
+                            <hr class="m-3">
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-12">
+                    {% include "modules/pagination.html" with page_obj=results %}
+                </div>
+            </div>
+        {% else %}
+            <div class="container">
+                <h3>Нет результатов</h3>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
