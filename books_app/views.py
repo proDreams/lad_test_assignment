@@ -1,11 +1,9 @@
-from django.contrib.auth.decorators import permission_required, user_passes_test
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, DeleteView, CreateView
-from django import forms as basic_forms
 
 from . import models, forms
 
@@ -64,6 +62,8 @@ class CommentDeleteView(DeleteView):
                             kwargs={'pk': self.object.book.pk})
 
 
+@method_decorator(user_passes_test(lambda u: u.is_superuser or u.groups.filter(name='editors').exists()),
+                  name='dispatch')
 class AddBookView(CreateView):
     model = models.BookModel
     form_class = forms.BookForm
