@@ -1,13 +1,16 @@
+from django.contrib.auth.decorators import permission_required, user_passes_test
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, DeleteView
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, DeleteView, CreateView
 from django import forms as basic_forms
 
 from . import models, forms
 
 
-class AllBooksPage(ListView):
+class AllBooksPageView(ListView):
     model = models.BookModel
     template_name = "books_app/all_books.html"
     extra_context = {'title': 'Главная страница'}
@@ -15,7 +18,7 @@ class AllBooksPage(ListView):
     paginate_by = 6
 
 
-class BookPage(DetailView):
+class BookPageView(DetailView):
     model = models.BookModel
     template_name = "books_app/book_page.html"
     context_object_name = 'book'
@@ -44,7 +47,7 @@ class CommentUpdateView(UpdateView):
     model = models.CommentModel
     template_name = 'books_app/comment_edit.html'
     form_class = forms.EditCommentForm
-    extra_context = {'title': f'Обновить комментарий?'}
+    extra_context = {'title': 'Обновить комментарий?'}
 
     def get_success_url(self):
         return reverse_lazy('book_page',
@@ -53,12 +56,46 @@ class CommentUpdateView(UpdateView):
 
 class CommentDeleteView(DeleteView):
     model = models.CommentModel
-    template_name = 'books_app/confirm_delete.html'
-    extra_context = {'title': f'Удалить комментарий?'}
+    template_name = 'books_app/confirm_delete_comment.html'
+    extra_context = {'title': 'Удалить комментарий?'}
 
     def get_success_url(self):
         return reverse_lazy('book_page',
                             kwargs={'pk': self.object.book.pk})
+
+
+class AddBookView(CreateView):
+    model = models.BookModel
+    form_class = forms.BookForm
+    template_name = 'books_app/add_book.html'
+    extra_context = {'title': 'Добавить книгу'}
+
+    def get_success_url(self):
+        return reverse_lazy('all_books')
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser or u.groups.filter(name='editors').exists()),
+                  name='dispatch')
+class BookUpdateView(UpdateView):
+    model = models.BookModel
+    template_name = 'books_app/book_edit.html'
+    form_class = forms.BookForm
+    extra_context = {'title': 'Обновить книгу?'}
+
+    def get_success_url(self):
+        return reverse_lazy('book_page',
+                            kwargs={'pk': self.object.pk})
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser or u.groups.filter(name='editors').exists()),
+                  name='dispatch')
+class BookDeleteView(DeleteView):
+    model = models.BookModel
+    template_name = 'books_app/confirm_delete_book.html'
+    extra_context = {'title': 'Удалить книгу?'}
+
+    def get_success_url(self):
+        return reverse_lazy('all_books')
 
 
 class SearchPageView(TemplateView):

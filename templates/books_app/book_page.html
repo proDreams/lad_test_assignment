@@ -15,9 +15,17 @@
                 <p>{{ book.short_description }}</p>
             </div>
         </div>
+        {% if request.user.is_superuser or 'editors' in request.user.groups.all.values_list.0 %}
+            <div class="row mt-3">
+                <div class="col-3">
+                    <a href="{% url 'book_edit' book.pk %}" class="btn btn-outline-info mt-2">Обновить книгу</a>
+                    <a href="{% url 'book_delete' book.pk %}" class="btn btn-outline-info mt-2">Удалить книгу</a>
+                </div>
+            </div>
+        {% endif %}
 
         <div class="row">
-            <h2 style="margin: 50px 0 30px 0">Добавить комментарий:</h2>
+            <h2 class="mt-3 mb-3">Добавить комментарий:</h2>
             {% if user.is_authenticated %}
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -28,8 +36,10 @@
                 <p><a href="{% url 'login' %}">Войдите</a> чтобы добавить комментарий.</p>
             {% endif %}
         </div>
+
+
         <div class="row">
-            <h2 style="margin: 50px 0 30px 0">Комментарии пользователей:</h2>
+            <h2 class="mt-3 mb-3">Комментарии пользователей:</h2>
             {% if comments %}
                 {% for comment in comments %}
                     <p>Автор: <strong>{{ comment.user }}</strong> | {{ comment.created_at }}</p>

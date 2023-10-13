@@ -8,8 +8,8 @@
         <pre>{{ object.comment }}</pre>
         <form method="POST">
             {% csrf_token %}
-            <button class="btn btn-danger" type="submit" style="margin-right: 20px;">Да, удалить</button>
-            <a href="{% url 'book_page' object.book.pk  %}" class="btn btn-secondary">Отмена</a>
+            <button class="btn btn-danger me-2" type="submit">Да, удалить</button>
+            <a href="{% url 'book_page' object.book.pk %}" class="btn btn-secondary">Отмена</a>
         </form>
     </div>
 {% endblock %}

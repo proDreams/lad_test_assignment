@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="form-section container mt-3">
+        <h2>Удаление книги</h2>
+        <p>Вы действительно хотите удалить эту книгу?</p>
+        <pre>{{ object.title }}</pre>
+        <form method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger me-2" type="submit">Да, удалить</button>
+            <a href="{% url 'book_page' object.pk %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

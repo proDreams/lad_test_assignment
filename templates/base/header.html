@@ -21,6 +21,10 @@
                     <ul class="navbar-nav">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
+                                <a class="nav-link btn btn-primary me-1"
+                                   href="{% url 'add_book' %}">Добавить книгу</a>
+                            </li>
+                            <li class="nav-item">
                                 <span class="nav-link btn btn-primary me-1">{{ request.user }}</span>
                             </li>
                             <li class="nav-item">
