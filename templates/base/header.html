@@ -10,11 +10,11 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mt-1 pe-3">
                         <li class="nav-item">
                             <form class="d-flex" method="GET" action="{% url 'search_page' %}">
                                 {{ search_form.query }}
-                                <button class="btn btn-primary my-btn" type="submit">Поиск</button>
+                                <button class="btn btn-sm btn-secondary my-btn" type="submit">Поиск</button>
                             </form>
                         </li>
                     </ul>
