@@ -26,3 +26,8 @@ class BookAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'book', 'created_at', 'comment')
     list_filter = ('user',)
+
+
+@admin.register(models.BookRatingModel)
+class BookRatingAdmin(admin.ModelAdmin):
+    list_display = ['user', 'book', 'rating']

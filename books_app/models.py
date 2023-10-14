@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Avg
 from django.urls import reverse
 
 
@@ -21,7 +22,7 @@ class AuthorModel(models.Model):
 class BookModel(models.Model):
     title = models.CharField(max_length=50,
                              verbose_name='Название книги')
-    author = models.ForeignKey('AuthorModel',
+    author = models.ForeignKey(AuthorModel,
                                on_delete=models.CASCADE,
                                verbose_name='Автор книги')
     publication_year = models.IntegerField(verbose_name='Дата публикации')
@@ -39,6 +40,10 @@ class BookModel(models.Model):
     def get_absolute_url(self):
         return reverse('book_page', kwargs={'pk': self.pk})
 
+    def average_rating(self):
+
+        return self.rating.aggregate(average=Avg('rating')).get('average') or 0
+
     def __str__(self):
         return self.title
 
@@ -47,7 +52,7 @@ class CommentModel(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
                              verbose_name='Пользователь')
-    book = models.ForeignKey('BookModel',
+    book = models.ForeignKey(BookModel,
                              on_delete=models.CASCADE,
                              verbose_name='Книга')
     comment = models.TextField(verbose_name='Комментарий')
@@ -59,3 +64,21 @@ class CommentModel(models.Model):
 
     def __str__(self):
         return f'Комментарий от {self.user} к книге {self.book}'
+
+
+class BookRatingModel(models.Model):
+    book = models.ForeignKey(BookModel,
+                             on_delete=models.CASCADE,
+                             related_name='rating',
+                             verbose_name='Книга')
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             verbose_name='Пользователь')
+    rating = models.IntegerField(verbose_name='Рейтинг')
+
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
+
+    def __str__(self):
+        return f'{self.user} оценил книгу {self.book} на {self.rating}'

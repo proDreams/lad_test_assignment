@@ -22,23 +22,60 @@ class BookPageView(DetailView):
     context_object_name = 'book'
 
     def get_context_data(self, **kwargs):
+        """
+        Метод передачи в шаблон контекстных данных.
+        Неочевидное место с передачей в шаблон формы оценки или оценки пользователя.
+        Если пользователь авторизован, сперва проверяем, есть ли у него оценка книги.
+        Если оценка есть, выводим его в шаблоне, если оценки нет, то выводим форму.
+        """
         context = super().get_context_data(**kwargs)
         context['comments'] = models.CommentModel.objects.filter(book=self.object)
-        context['form'] = forms.AddCommentForm()
+        context['comment_form'] = forms.AddCommentForm()
+        if self.request.user.is_authenticated:
+            user_rating = models.BookRatingModel.objects.filter(user=self.request.user, book=self.get_object()).first()
+            if user_rating:
+                context['user_rating'] = user_rating
+            else:
+                context['rating_form'] = forms.BookRateForm()
         return context
 
     def post(self, request, *args, **kwargs):
-        form = forms.AddCommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.book = self.get_object()
-            comment.user = request.user
-            comment.save()
-            return self.get(request, *args, **kwargs)
+        """
+        Метод обработки POST-запросов.
+        Если в пост запросе передана форма оценки книги, то создаём новый объект оценки.
+        Если в пост запросе передана форма комментария, то создаём новый объект комментария.
+        Иначе возвращаем обычный шаблон.
+        """
+        if 'rating' in request.POST:
+            form = forms.BookRateForm(request.POST)
+            if form.is_valid():
+                rating = int(form.cleaned_data['rating'])
+                book = self.get_object()
+                rate = models.BookRatingModel(
+                    rating=rating,
+                    user=request.user,
+                    book=book
+                )
+                rate.save()
+                return self.get(request, *args, **kwargs)
+            else:
+                context = self.get_context_data(**kwargs)
+                context['rating_form'] = form
+                return render(request, self.template_name, context)
+        elif 'comment' in request.POST:
+            form = forms.AddCommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.book = self.get_object()
+                comment.user = request.user
+                comment.save()
+                return self.get(request, *args, **kwargs)
+            else:
+                context = self.get_context_data(**kwargs)
+                context['comment_form'] = form
+                return render(request, self.template_name, context)
         else:
-            context = self.get_context_data(**kwargs)
-            context['form'] = form
-            return render(request, self.template_name, context)
+            return self.get(request, *args, **kwargs)
 
 
 class CommentUpdateView(UpdateView):

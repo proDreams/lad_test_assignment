@@ -10,11 +10,23 @@
             <div class="col">
                 <h2>{{ book.title }}</h2>
                 <p class="lead"><b>Автор:</b> {{ book.author }}<br><b>
-                    Год издания:</b> {{ book.publication_year }}<br><br>
+                    Год издания:</b> {{ book.publication_year }}<br>
+                    <b>Оценка книги:</b> {{ book.average_rating }}<br>
+                    {% if user_rating %}<b>Ваша оценка книги:</b> {{ user_rating.rating }}{% endif %}<br><br>
                     <b>Краткое описание:</b></p>
                 <p>{{ book.short_description }}</p>
             </div>
+            {% if rating_form %}
+                <div class="col-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ rating_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            {% endif %}
         </div>
+
         {% if request.user.is_superuser or 'editors' in request.user.groups.all.values_list.0 %}
             <div class="row mt-3">
                 <div class="col-3">
@@ -29,7 +41,7 @@
             {% if user.is_authenticated %}
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form.comment }}
+                    {{ comment_form.comment }}
                     <button class="btn btn-outline-warning mt-2" type="submit">Отправить</button>
                 </form>
             {% else %}

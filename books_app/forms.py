@@ -110,3 +110,11 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = models.BookModel
         fields = ['title', 'author', 'publication_year', 'short_description', 'book_cover']
+
+
+class BookRateForm(forms.Form):
+    rating = forms.ChoiceField(
+        label='Оценить книгу',
+        choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],
+        widget=forms.RadioSelect()
+    )
