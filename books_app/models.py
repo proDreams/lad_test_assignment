@@ -41,7 +41,6 @@ class BookModel(models.Model):
         return reverse('book_page', kwargs={'pk': self.pk})
 
     def average_rating(self):
-
         return self.rating.aggregate(average=Avg('rating')).get('average') or 0
 
     def __str__(self):
@@ -79,6 +78,7 @@ class BookRatingModel(models.Model):
     class Meta:
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинги'
+        unique_together = ('book', 'user')
 
     def __str__(self):
         return f'{self.user} оценил книгу {self.book} на {self.rating}'

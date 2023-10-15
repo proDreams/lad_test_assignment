@@ -51,12 +51,11 @@ class BookPageView(DetailView):
             if form.is_valid():
                 rating = int(form.cleaned_data['rating'])
                 book = self.get_object()
-                rate = models.BookRatingModel(
-                    rating=rating,
+                models.BookRatingModel.objects.get_or_create(
                     user=request.user,
-                    book=book
+                    book=book,
+                    defaults={'rating': rating}
                 )
-                rate.save()
                 return self.get(request, *args, **kwargs)
             else:
                 context = self.get_context_data(**kwargs)

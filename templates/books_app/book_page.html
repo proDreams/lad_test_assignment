@@ -54,7 +54,8 @@
             <h2 class="mt-3 mb-3">Комментарии пользователей:</h2>
             {% if comments %}
                 {% for comment in comments %}
-                    <p>Автор: <strong>{{ comment.user }}</strong> | {{ comment.created_at }}</p>
+                    <p><b>Автор:</b> {{ comment.user }} {% if user_rating %}| <b>Ценил книгу:</b>
+                        {{ user_rating.rating }}{% endif %} | {{ comment.created_at }}</p>
                     <p>{{ comment.comment }}</p>
 
                     {% if comment.user == user %}
